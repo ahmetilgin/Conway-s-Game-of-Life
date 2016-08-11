@@ -1,8 +1,8 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
-#define diziboyutu 768
+#define diziboyutu 1000
 
-
+using namespace std;
 int main(){
     srand(time(NULL));
              // Initialize SDL2
@@ -16,15 +16,16 @@ int main(){
         }
     }
 
+
+
 int toplam =0;
 int x,y;
 
-    for(int i = 0;i <100;i++){
+    for(int i = 0 ; i <10000;i++){
         x=rand()%diziboyutu;
         y=rand()%diziboyutu;
-        dizi[x][y] = 1;
+        dizi[x][y]=1;
     }
-
 
     sf::RenderWindow(window);
     window.create(sf::VideoMode(diziboyutu, diziboyutu), "Hayat...");
@@ -41,36 +42,29 @@ int x,y;
     window.draw(sprite);
     window.display();
     //int a = 10;
-dizi[500][10]=1;
-dizi[500][11]=1;
-dizi[499][11]=1;
-dizi[499][10]=1;
+    int c =diziboyutu/2;
+dizi[c][c]=1;
+dizi[c][c+1]=1;
+dizi[c][c+2]=1;
+dizi[c+1][c]=1;
+dizi[c+2][c+1]=1;
 
 while(window.isOpen())
 {
 
     window.clear();
-sf::Vector2f mouse_pos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+    sf::Vector2f mouse_pos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
 
-std::cout<<mouse_pos.x<<" "<<mouse_pos.y<<"\n";
-    if(mouse_pos.x < 0)
-    {
-        mouse_pos.x = -(mouse_pos.x);
-    }
-    if(mouse_pos.y < 0){
-        mouse_pos.y = -(mouse_pos.y);
-    }
+    std::cout<<mouse_pos.x<<" "<<mouse_pos.y<<"\n";
     x= mouse_pos.x;
     y = mouse_pos.y;
 
 
-    dizi[x][y]=1;
-    dizi[x][y+1]=1;
-    dizi[x-1][y+1]=1;
-    dizi[x-1][y]=1;
-
-
-
+dizi[x][y]=1;
+dizi[x][y+1]=1;
+dizi[x][y+2]=1;
+dizi[x+1][y]=1;
+dizi[x+2][y+1]=1;
 
 
 
@@ -79,48 +73,62 @@ std::cout<<mouse_pos.x<<" "<<mouse_pos.y<<"\n";
 //sf::sleep(sf::seconds(0.5f));
 
 
-    for(int i = 1;i<diziboyutu-1;i++){
+for(int i = 1;i<diziboyutu-1;i++){
         for(int j = 1;j<diziboyutu-1;j++){
 
-            if (dizi[i][j+1] == 1) toplam++;
+            if ((dizi[i][j+1] == 1)||(dizi[i][j+1] == -1)) toplam++;
 
-            if (dizi[i][j-1] == 1) toplam++;
+            if ((dizi[i][j-1] == 1)||(dizi[i][j-1] == -1)) toplam++;
 
-            if (dizi[i+1][j] ==1) toplam++;
+            if ((dizi[i+1][j] ==1)||(dizi[i+1][j] ==-1)) toplam++;
 
-            if (dizi[i+1][j-1] == 1) toplam++;
+            if ((dizi[i+1][j-1] == 1)||(dizi[i+1][j-1] == -1)) toplam++;
 
-            if (dizi[i+1][j+1]==1)toplam++;
+            if ((dizi[i+1][j+1]==1)||(dizi[i+1][j+1]==-1))toplam++;
 
-            if (dizi[i-1][j] == 1) toplam++;
+            if ((dizi[i-1][j] == 1)||(dizi[i-1][j] == -1)) toplam++;
 
-            if (dizi[i-1][j-1] == 1) toplam++;
+            if ((dizi[i-1][j-1] == 1)||(dizi[i-1][j-1] == -1)) toplam++;
 
-            if (dizi[i-1][j+1]==1) toplam++;
+            if ((dizi[i-1][j+1]==1)||(dizi[i-1][j+1]==-1)) toplam++;
 
 
-            if((toplam > 3) || (toplam < 2)){
-                    dizi[i][j]=0;
+            if(((toplam > 3) || (toplam < 2)) && (dizi[i][j]==1)){
+              dizi[i][j]=-1;
             }
-            if((toplam == 3) &&( dizi[i][j]==0)){
-                dizi[i][j] = 1;
+            if((toplam == 3)&&(dizi[i][j]==0)){
+                dizi[i][j] = 2;
             }
+
             toplam = 0;
+
+        }
+    }
+    for(int i = 0;i < diziboyutu;i++){
+        for(int j = 0;j<diziboyutu;j++){
+            if(dizi[i][j]==-1){
+                dizi[i][j]=0;
+            }
+            if(dizi[i][j]==2){
+                dizi[i][j]=1;
+            }
         }
     }
 
 
-    for(int i = 0;i < diziboyutu;i++){
+
+for(int i = 0;i < diziboyutu;i++){
         for(int j = 0; j < diziboyutu;j++){
-            if(dizi[i][j] == 1){
+            if((dizi[i][j] == 1)){
                 sprite.setPosition(i,j);
                 window.draw(sprite);
             }
-        }
     }
+}
 
 
-  window.display();
+
+        window.display();
         sf::Event event;
         while(window.pollEvent(event))
         {
@@ -129,7 +137,7 @@ std::cout<<mouse_pos.x<<" "<<mouse_pos.y<<"\n";
 }
 
     return 0;
-}
+ }
 
 
 
